@@ -1,8 +1,13 @@
+// randomizes things
+function randomize (max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+
+// main figure class
 class Figure {
     constructor(options) {
-        this.size = options.size;
-        this.posX = options.posX;
-        this.posY = options.posY;
+        this.size = randomize(options.size);
         this.id = options.id;
         this.color = options.color;
     }
@@ -17,11 +22,7 @@ class Figure {
         if (this.size) {
             el.style.width = this.size + 'px';
             el.style.height = this.size + 'px';
-        } else {
-            el.style.width = randomize(borderX) + 'px';
-            el.style.height = randomize(borderY) + 'px';
-            console.log(el.style.height = randomize() + 'px')
-        }
+        } 
 
         if(typeof(this.color) == Number){
             el.style.background = this.color;
@@ -29,39 +30,63 @@ class Figure {
             el.style.background = '#' + Math.floor(Math.random()*16777215).toString(16);
         }
 
-        el.style.top = randomize(borderY) + 'px';
-        el.style.left = randomize(borderX) + 'px';
+        // el.style.top = randomize(borderY) + 'px';
+        // el.style.left = randomize(borderX) + 'px';
         el.style.transform = 'rotate(' + randomize(360) + 'deg)';
+        
+        return el;
+    }
+};
+
+
+// circle class
+class Circle extends Figure {
+    constructor(options) {
+        super(options)
+        this.radius = options.radius;
+    }
+
+    setFigure() {
+        let el = super.setFigure()
+        el.style.borderRadius = this.radius + 'px';
     }
 }
 
-function randomize (max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
 
-
-
+// global settings
 const count = 10;
 const borderX = window.innerWidth;
 const borderY = window.innerHeight;
 
 
+// main controller
 document.addEventListener("DOMContentLoaded", function(){
     let container = document.getElementById('container');
     container.style.overflow = 'hidden';
-    container.style.position = 'relative';
+    container.style.position = 'adsolute';
     container.style.width = borderX + 'px';
     container.style.height = borderY + 'px';
 
     for (let i = 0; i < count; i++){
 
-        let el = new Figure({
-            size: 1222,
-            posX: 12,
-            posY: 12,
-            id: i,
-            color: null,
-        });
+        let figureDefine = randomize(2),
+            el;
+
+        if (figureDefine == 0) {
+            el = new Circle({
+                size: 270,
+                id: i,
+                color: null,
+                radius: 1000
+            });
+        } else {
+            el = new Figure({
+                size: 270,
+                id: i,
+                color: null,
+                radius: null,
+            });
+        };
 
         el.setFigure();
         
