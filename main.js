@@ -1,3 +1,10 @@
+// global settings
+const count = 5;
+const borderX = window.innerWidth;
+const borderY = window.innerHeight;
+const figures = ['Figure', 'Circle', 'Triangle', 'Rectangle'];
+
+
 // randomizes things
 function randomize (max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -10,6 +17,7 @@ class Figure {
         this.size = randomize(options.size);
         this.id = options.id;
         this.color = options.color;
+        this.rotate = options.rotate;
     }
 
     setFigure(){
@@ -18,6 +26,8 @@ class Figure {
         
         el.setAttribute("id", "div"+this.id);
         el.style.position = 'absolute';
+        let rotation = randomize(360);
+        el.style.transform = 'rotate(' + rotation + 'deg)';
 
         if (this.size) {
             el.style.width = this.size + 'px';
@@ -30,9 +40,18 @@ class Figure {
             el.style.background = '#' + Math.floor(Math.random()*16777215).toString(16);
         }
 
-        // el.style.top = randomize(borderY) + 'px';
-        // el.style.left = randomize(borderX) + 'px';
-        el.style.transform = 'rotate(' + randomize(360) + 'deg)';
+        if(this.rotate == true) {
+            let deg = rotation;
+            setInterval(() => {
+                el.style.transform = 'rotate('+ deg +'deg)';
+                el.style.transitionDuration = '1s';
+                deg = (deg+ 1)
+            }, 100);
+        }
+
+        el.style.top = randomize(500) + 'px';
+        el.style.left = randomize(500) + 'px';
+        
         
         return el;
     }
@@ -53,10 +72,37 @@ class Circle extends Figure {
 }
 
 
-// global settings
-const count = 10;
-const borderX = window.innerWidth;
-const borderY = window.innerHeight;
+// triangle class
+class Triangle extends Figure {
+    constructor(options) {
+        super(options)
+        this.radius = options.radius;
+    }
+
+    setFigure() {
+        let el = super.setFigure()
+        el.style.width = 0 + 'px';
+        el.style.height = 0 + 'px';
+        el.style.borderLeft = (this.size / 2) + "px solid transparent";
+        el.style.borderRight = (this.size / 2) + "px solid transparent";
+        el.style.borderBottom = this.size + "px solid #"+ Math.floor(Math.random()*16777215).toString(16);
+        el.style.background = "transparent";
+    }
+}
+
+
+// rectangle class
+class Rectangle extends Figure {
+    constructor(options) {
+        super(options)
+        this.radius = options.radius;
+    }
+
+    setFigure() {
+        let el = super.setFigure()
+        el.style.width = (this.size / 2) + 'px';
+    }
+}
 
 
 // main controller
@@ -69,23 +115,68 @@ document.addEventListener("DOMContentLoaded", function(){
 
     for (let i = 0; i < count; i++){
 
-        let figureDefine = randomize(2),
+        let figureDefine = randomize(figures.length),
+            rotateDefine = randomize(2),
             el;
 
-        if (figureDefine == 0) {
-            el = new Circle({
-                size: 270,
-                id: i,
-                color: null,
-                radius: 1000
-            });
-        } else {
-            el = new Figure({
-                size: 270,
-                id: i,
-                color: null,
-                radius: null,
-            });
+        let rotate = function(){
+            if (rotateDefine == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        switch (figureDefine) {
+            case 0: 
+                el = new Figure({
+                        size: 270,
+                        id: i, 
+                        color: null,
+                        radius: null,
+                        rotate: rotate(),
+                    });
+            break;
+            
+            case 1:
+                el = new Circle({
+                    size: 270,
+                    id: i,
+                    color: null,
+                    radius: 1000,
+                });
+            break;
+
+            case 2:
+                el = new Triangle({
+                    size: 270,
+                    id: i,
+                    color: null,
+                    radius: 1000,
+                    rotate: rotate(),
+                });
+            break;
+
+            case 3:
+                el = new Rectangle({
+                    size: 270,
+                    id: i,
+                    color: null,
+                    radius: 1000,
+                    rotate: rotate(),
+                });
+            break;
+
+            default:
+                el = new Figure({
+                    size: 270,
+                    id: i, 
+                    color: null,
+                    radius: null,
+                    rotate: rotate(),
+                });
+            break;
+
         };
 
         el.setFigure();
