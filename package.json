@@ -1,0 +1,27 @@
+{
+  "name": "random-figure-generator",
+  "version": "1.0.0",
+  "description": "Generates random figures on your page.",
+  "main": "main.js",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "watch": "webpack --watch --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arperevalov/random-figure-generator.git"
+  },
+  "author": "lovetraindriver",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arperevalov/random-figure-generator/issues"
+  },
+  "homepage": "https://github.com/arperevalov/random-figure-generator#readme",
+  "dependencies": {
+    "chroma-js": "^2.1.0",
+    "webpack": "^5.11.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.3.1"
+  }
+}

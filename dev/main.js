@@ -1,8 +1,21 @@
+let chroma = require('chroma-js')
+
 // global settings
-const count = 5;
+const count = 12;
+
 const borderX = window.innerWidth;
 const borderY = window.innerHeight;
-const figures = ['Figure', 'Circle', 'Triangle', 'Rectangle'];
+
+const figures = ['Figure', 'Circle', 'Triangle', 'Rectangle', 'Trapezoid'];
+
+// const colors = ['577EF4', 'EA4C89'];
+const colors = [chroma.random(), chroma.random()]
+
+const palette = chroma.scale(colors).mode('lch').colors(count);
+const randomPaletteColor = function() {
+    let colorId = randomize(palette.length);
+    return palette[colorId];
+}
 
 
 // randomizes things
@@ -34,11 +47,7 @@ class Figure {
             el.style.height = this.size + 'px';
         } 
 
-        if(typeof(this.color) == Number){
-            el.style.background = this.color;
-        } else {
-            el.style.background = '#' + Math.floor(Math.random()*16777215).toString(16);
-        }
+        el.style.background = this.color;
 
         if(this.rotate == true) {
             let deg = rotation;
@@ -76,7 +85,6 @@ class Circle extends Figure {
 class Triangle extends Figure {
     constructor(options) {
         super(options)
-        this.radius = options.radius;
     }
 
     setFigure() {
@@ -85,7 +93,7 @@ class Triangle extends Figure {
         el.style.height = 0 + 'px';
         el.style.borderLeft = (this.size / 2) + "px solid transparent";
         el.style.borderRight = (this.size / 2) + "px solid transparent";
-        el.style.borderBottom = this.size + "px solid #"+ Math.floor(Math.random()*16777215).toString(16);
+        el.style.borderBottom = this.size + "px solid "+ this.color;
         el.style.background = "transparent";
     }
 }
@@ -95,12 +103,34 @@ class Triangle extends Figure {
 class Rectangle extends Figure {
     constructor(options) {
         super(options)
-        this.radius = options.radius;
     }
 
     setFigure() {
         let el = super.setFigure()
         el.style.width = (this.size / 2) + 'px';
+    }
+}
+
+
+// trapezoid class
+class Trapezoid extends Figure {
+    constructor(options) {
+        super(options)
+        this.radius = options.radius;
+    }
+
+    setFigure() {
+        let el = super.setFigure()
+
+        el.style.width = this.size + 'px';
+        el.style.height = 0 + 'px';
+        el.style.borderLeft = (this.size / 2) + "px solid transparent";
+        el.style.borderRight = (this.size / 2) + "px solid transparent";
+        el.style.borderBottom = this.size + "px solid "+ this.color;
+        el.style.background = "transparent";
+        
+        console.log(this.id)
+        console.log('trapezoid!')
     }
 }
 
@@ -132,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 el = new Figure({
                         size: 270,
                         id: i, 
-                        color: null,
+                        color: randomPaletteColor(),
                         radius: null,
                         rotate: rotate(),
                     });
@@ -142,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 el = new Circle({
                     size: 270,
                     id: i,
-                    color: null,
+                    color: randomPaletteColor(),
                     radius: 1000,
                 });
             break;
@@ -151,8 +181,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 el = new Triangle({
                     size: 270,
                     id: i,
-                    color: null,
-                    radius: 1000,
+                    color: randomPaletteColor(),
                     rotate: rotate(),
                 });
             break;
@@ -161,8 +190,16 @@ document.addEventListener("DOMContentLoaded", function(){
                 el = new Rectangle({
                     size: 270,
                     id: i,
-                    color: null,
-                    radius: 1000,
+                    color: randomPaletteColor(),
+                    rotate: rotate(),
+                });
+            break;
+
+            case 4:
+                el = new Trapezoid({
+                    size: 270,
+                    id: i,
+                    color: randomPaletteColor(),
                     rotate: rotate(),
                 });
             break;
@@ -171,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 el = new Figure({
                     size: 270,
                     id: i, 
-                    color: null,
+                    color: randomPaletteColor(),
                     radius: null,
                     rotate: rotate(),
                 });
@@ -184,4 +221,3 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
 });
-    
